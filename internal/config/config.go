@@ -35,7 +35,7 @@ func Load() *Config {
 		AppName:              getEnv("APP_NAME", "fiap-sa-product-service"),
 		AppEnv:               environment,
 		DatabaseUser:         fetchEnv("DB_USER"),
-		DatabasePassword:     fetchEnv("DB_PASSWORD"),
+		DatabasePassword:     getEnv("DB_PASSWORD", ""),
 		DatabaseHost:         fetchEnv("DB_HOST"),
 		DatabaseName:         fetchEnv("DB_NAME"),
 		DatabasePort:         fetchEnv("DB_PORT"),

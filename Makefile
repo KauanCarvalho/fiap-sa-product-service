@@ -15,7 +15,7 @@ ifeq ($(DB_ENV),test)
 endif
 
 .DEFAULT_GOAL := help
-.PHONY: help deps setup-git-hooks lint check-coverage migration migrate-up migrate-down test build-api run-api run-api-air docker-up docker-down install-tools swag
+.PHONY: help deps setup-git-hooks lint check-coverage migration migrate-up migrate-down test coverage-html build-api run-api run-api-air docker-up docker-down install-tools swag
 
 help:
 	@echo "Usage: make [target]"
@@ -30,6 +30,7 @@ help:
 	@echo "  migrate-up      Apply database migrations"
 	@echo "  migrate-down    Revert one database migration"
 	@echo "  test            Run tests"
+	@echo "  coverage-html   Generate HTML coverage report"
 	@echo "  build-api       Build the API"
 	@echo "  run-api         Run the API"
 	@echo "  run-api-air     Run the API with live reloading"
@@ -57,6 +58,10 @@ test:
 check-coverage: test
 	@echo "Checking coverage..."
 	$(GO) tool go-test-coverage --config=./.testcoverage.yml
+
+coverage-html: test
+	@echo "Openning coverage report..."
+	$(GO) tool cover -html=coverage.out
 
 migration:
 	@echo "Creating migration files for '$(filter-out $@,$(MAKECMDGOALS))'..."
