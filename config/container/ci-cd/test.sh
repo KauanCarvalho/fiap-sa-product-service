@@ -2,8 +2,6 @@
 
 set -e
 
-echo "Enviroments Variables Inputing..."
-
 DATABASE_URL="mysql://${DB_USER}:${DB_PASSWORD}@tcp(${DB_HOST}:${DB_PORT})/${DB_NAME}?charset=utf8mb4&parseTime=true"
 
 echo "DATABASE_URL: ${DATABASE_URL}"
