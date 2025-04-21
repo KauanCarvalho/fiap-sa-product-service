@@ -1,0 +1,5 @@
+# File with environment variables.
+.env
+
+# Folder with generated binary files
+bin/*
