@@ -36,6 +36,17 @@ jobs:
         with:
           go-version: 1.24.2
 
+      - name: Cache Go modules
+        id: go-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
       - name: Install dependencies
         run: go mod download -x
 
@@ -54,6 +65,20 @@ jobs:
         with:
           go-version: 1.24.2
 
+      - name: Cache Go modules
+        id: go-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Install dependencies
+        run: go mod download -x
+
       - name: Run linter
         run: go tool golangci-lint run ./... --config .golangci.yml
 
@@ -68,6 +93,20 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: 1.24.2
+
+      - name: Cache Go modules
+        id: go-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Install dependencies
+        run: go mod download -x
 
       - name: Generate Swagger docs
         run: go tool swag init --parseDependency --parseInternal -g cmd/api/main.go -o ./swagger --ot json,go
