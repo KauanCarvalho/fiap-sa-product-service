@@ -12,6 +12,8 @@ import (
 )
 
 func TestPing(t *testing.T) {
+	prepareTestDatabase()
+
 	t.Run("successfully ping the database", func(t *testing.T) {
 		assert.NoError(t, ds.Ping(ctx), "The Ping method should not return an error when the database is reachable")
 	})

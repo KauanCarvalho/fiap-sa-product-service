@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/KauanCarvalho/fiap-sa-product-service/internal/application/dto"
-	"github.com/KauanCarvalho/fiap-sa-product-service/internal/domain"
+	"github.com/KauanCarvalho/fiap-sa-product-service/internal/core/domain"
 
 	"github.com/gin-gonic/gin"
 )
