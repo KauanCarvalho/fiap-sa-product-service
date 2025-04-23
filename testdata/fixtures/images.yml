@@ -1,0 +1,13 @@
+# Hamburger image 1.
+- id: 1
+  product_id: 1
+  url: https://example.com/hamburger1.jpg
+  created_at: RAW=NOW()
+  updated_at: RAW=NOW()
+
+# Hamburger image 2.
+- id: 2
+  product_id: 1
+  url: https://example.com/hamburger2.jpg
+  created_at: RAW=NOW()
+  updated_at: RAW=NOW()

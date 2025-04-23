@@ -1,4 +1,4 @@
-package datastore_test
+package usecase_test
 
 import (
 	"context"
@@ -9,6 +9,7 @@ import (
 	"github.com/KauanCarvalho/fiap-sa-product-service/internal/adapter/datastore"
 	"github.com/KauanCarvalho/fiap-sa-product-service/internal/config"
 	"github.com/KauanCarvalho/fiap-sa-product-service/internal/core/domain"
+	"github.com/KauanCarvalho/fiap-sa-product-service/internal/core/usecase"
 	"github.com/KauanCarvalho/fiap-sa-product-service/internal/di"
 
 	"github.com/go-testfixtures/testfixtures/v3"
@@ -20,6 +21,11 @@ var (
 	cfg      *config.Config
 	sqlDB    *gorm.DB
 	fixtures *testfixtures.Loader
+	cp       usecase.CreateProductUseCase
+	gp       usecase.GetProductUseCase
+	gps      usecase.GetProductsUseCase
+	up       usecase.UpdateProductUseCase
+	dpu      usecase.DeleteProductUseCase
 	ds       domain.Datastore
 )
 
@@ -44,6 +50,12 @@ func TestMain(m *testing.M) {
 	}
 
 	ds = datastore.NewDatastore(sqlDB)
+
+	cp = usecase.NewCreateProductUseCase(ds)
+	gp = usecase.NewGetProductUseCase(ds)
+	gps = usecase.NewGetProductsUseCase(ds)
+	up = usecase.NewUpdateProductUseCase(ds)
+	dpu = usecase.NewDeleteProductUseCase(ds)
 
 	os.Exit(m.Run())
 }

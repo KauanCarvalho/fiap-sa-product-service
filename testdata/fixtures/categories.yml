@@ -1,0 +1,27 @@
+# Lanche.
+- id: 1
+  name: lanche
+  created_at: RAW=NOW()
+  updated_at: RAW=NOW()
+  deleted_at: null
+
+# Bebida.
+- id: 2
+  name: bebida
+  created_at: RAW=NOW()
+  updated_at: RAW=NOW()
+  deleted_at: null
+
+# Sobremesa.
+- id: 3
+  name: sobremesa
+  created_at: RAW=NOW()
+  updated_at: RAW=NOW()
+  deleted_at: null
+
+# Acompanhamento.
+- id: 4
+  name: acompanhamento
+  created_at: RAW=NOW()
+  updated_at: RAW=NOW()
+  deleted_at: null

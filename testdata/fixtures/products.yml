@@ -1,0 +1,54 @@
+# Hamburger.
+- id: 1
+  name: hamburger
+  description: hamburger
+  price: 10.00
+  sku: hamburger
+  category_id: 1
+  created_at: RAW=NOW()
+  updated_at: RAW=NOW()
+  deleted_at: null
+
+# Hamburger deleted
+- id: 2
+  name: hamburger deleted
+  description: hamburger
+  price: 10.00
+  sku: hamburger-deleted
+  category_id: 1
+  created_at: RAW=NOW()
+  updated_at: RAW=NOW()
+  deleted_at: RAW=NOW()
+
+# Soda.
+- id: 3
+  name: soda
+  description: soda
+  price: 3.00
+  sku: soda
+  category_id: 2
+  created_at: RAW=NOW()
+  updated_at: RAW=NOW()
+  deleted_at: null
+
+# Cake.
+- id: 4
+  name: cake
+  description: cake
+  price: 7.00
+  sku: cake
+  category_id: 3
+  created_at: RAW=NOW()
+  updated_at: RAW=NOW()
+  deleted_at: null
+
+# French fries.
+- id: 5
+  name: french fries
+  description: french fries
+  price: 7.00
+  sku: french-fries
+  category_id: 4
+  created_at: RAW=NOW()
+  updated_at: RAW=NOW()
+  deleted_at: null
