@@ -120,12 +120,30 @@ func TestProductAdminHandler_Create(t *testing.T) {
 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
 	})
+
+	t.Run("should return 409 the same sku", func(t *testing.T) {
+		body := map[string]interface{}{
+			"name":        "hamburger",
+			"price":       20.0,
+			"description": "Produto com SKU duplicado",
+			"category":    map[string]string{"name": "lanche"},
+			"images":      []map[string]string{{"url": "https://example.com/img.jpg"}},
+		}
+		payload, _ := json.Marshal(body)
+		req, _ := http.NewRequest(http.MethodPost, "/api/v1/admin/products/", bytes.NewReader(payload))
+		req.Header.Set("Content-Type", "application/json")
+		w := httptest.NewRecorder()
+
+		ginEngine.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusConflict, w.Code)
+	})
 }
 
 func TestProductAdminHandler_Update(t *testing.T) {
-	prepareTestDatabase()
-
 	t.Run("when body is invalid", func(t *testing.T) {
+		prepareTestDatabase()
+
 		req, _ := http.NewRequest(http.MethodPut, "/api/v1/admin/products/hamburger", bytes.NewReader([]byte("test")))
 		req.Header.Set("Content-Type", "application/json")
 		w := httptest.NewRecorder()
@@ -136,6 +154,8 @@ func TestProductAdminHandler_Update(t *testing.T) {
 	})
 
 	t.Run("should update product successfully", func(t *testing.T) {
+		prepareTestDatabase()
+
 		body := map[string]interface{}{
 			"name":        "Hambúrguer Atualizado",
 			"price":       30.0,
@@ -155,6 +175,8 @@ func TestProductAdminHandler_Update(t *testing.T) {
 	})
 
 	t.Run("should return 400 for negative price", func(t *testing.T) {
+		prepareTestDatabase()
+
 		body := map[string]interface{}{
 			"name":        "Produto Inválido",
 			"price":       -5,
@@ -173,6 +195,8 @@ func TestProductAdminHandler_Update(t *testing.T) {
 	})
 
 	t.Run("should return 404 when updating non-existent product", func(t *testing.T) {
+		prepareTestDatabase()
+
 		body := map[string]interface{}{
 			"name":        "Qualquer",
 			"price":       20.0,
@@ -189,6 +213,24 @@ func TestProductAdminHandler_Update(t *testing.T) {
 
 		assert.Equal(t, http.StatusNotFound, w.Code)
 	})
+
+	t.Run("should return 409 for duplicate SKU", func(t *testing.T) {
+		body := map[string]interface{}{
+			"name":        "soda",
+			"price":       30.0,
+			"description": "Hambúrguer com cheddar",
+			"category":    map[string]string{"name": "bebida"},
+			"images":      []map[string]string{{"url": "https://example.com/hamburger.jpg"}},
+		}
+		payload, _ := json.Marshal(body)
+		req, _ := http.NewRequest(http.MethodPut, "/api/v1/admin/products/hamburger", bytes.NewReader(payload))
+		req.Header.Set("Content-Type", "application/json")
+		w := httptest.NewRecorder()
+
+		ginEngine.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusConflict, w.Code)
+	})
 }
 
 func TestProductAdminHandler_Delete(t *testing.T) {
@@ -203,12 +245,12 @@ func TestProductAdminHandler_Delete(t *testing.T) {
 		assert.Equal(t, http.StatusNoContent, w.Code)
 	})
 
-	t.Run("should return 500 for non-existing product", func(t *testing.T) {
+	t.Run("should return 204 for non-existing product", func(t *testing.T) {
 		req, _ := http.NewRequest(http.MethodDelete, "/api/v1/admin/products/nonexistent", nil)
 		w := httptest.NewRecorder()
 
 		ginEngine.ServeHTTP(w, req)
 
-		assert.Equal(t, http.StatusInternalServerError, w.Code)
+		assert.Equal(t, http.StatusNoContent, w.Code)
 	})
 }

@@ -3,6 +3,7 @@ package datastore_test
 import (
 	"testing"
 
+	"github.com/KauanCarvalho/fiap-sa-product-service/internal/adapter/datastore"
 	"github.com/KauanCarvalho/fiap-sa-product-service/internal/core/domain/entities"
 	"github.com/KauanCarvalho/fiap-sa-product-service/internal/core/usecase/ports"
 	"github.com/stretchr/testify/assert"
@@ -139,14 +140,14 @@ func TestCreateProduct(t *testing.T) {
 		}
 
 		err := ds.CreateProduct(ctx, duplicateProduct)
-		assert.Error(t, err)
+		require.ErrorIs(t, err, datastore.ErrExistingRecord)
 	})
 }
 
 func TestUpdateProduct(t *testing.T) {
-	prepareTestDatabase()
-
 	t.Run("update successfully", func(t *testing.T) {
+		prepareTestDatabase()
+
 		category := &entities.Category{Name: "Refrigerante"}
 		require.NoError(t, sqlDB.Create(category).Error)
 
@@ -179,6 +180,8 @@ func TestUpdateProduct(t *testing.T) {
 	})
 
 	t.Run("fail to update product when SKU not found", func(t *testing.T) {
+		prepareTestDatabase()
+
 		product := &entities.Product{
 			Name:        "Produto Inexistente",
 			Description: "Produto que não existe",
@@ -188,6 +191,30 @@ func TestUpdateProduct(t *testing.T) {
 
 		err := ds.UpdateProduct(ctx, product)
 		assert.Error(t, err)
+	})
+
+	t.Run("fail to update product with duplicate SKU", func(t *testing.T) {
+		prepareTestDatabase()
+
+		category := &entities.Category{Name: "Refrigerante"}
+		require.NoError(t, sqlDB.Create(category).Error)
+
+		product := &entities.Product{
+			Name:        "itubaina",
+			Description: "Gelado",
+			Price:       6.50,
+			SKU:         "guarana",
+			CategoryID:  category.ID,
+			Images: []entities.Image{
+				{URL: "http://img/guarana-1"},
+			},
+		}
+		require.NoError(t, sqlDB.Create(&product).Error)
+
+		product.Name = "hamburger"
+
+		err := ds.UpdateProduct(ctx, product)
+		require.ErrorIs(t, err, datastore.ErrExistingRecord)
 	})
 }
 

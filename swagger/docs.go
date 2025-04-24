@@ -26,6 +26,234 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/admin/products/": {
+            "put": {
+                "description": "Update product.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Update product.",
+                "parameters": [
+                    {
+                        "description": "request body",
+                        "name": "product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_core_usecase_dto.ProductInputUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.ProductOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.APIErrorsOutput"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.APIErrorsOutput"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.APIErrorsOutput"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.APIErrorsOutput"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create product.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Create product.",
+                "parameters": [
+                    {
+                        "description": "request body",
+                        "name": "product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_core_usecase_dto.ProductInputCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.ProductOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.APIErrorsOutput"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.APIErrorsOutput"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.APIErrorsOutput"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.APIErrorsOutput"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete product.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Delete product.",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.APIErrorsOutput"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/products/": {
+            "get": {
+                "description": "Get products by filter.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Get products by filter.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Current page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page size",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Category name",
+                        "name": "category",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.ProductsOutput"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.APIErrorsOutput"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/products/{sku}": {
+            "get": {
+                "description": "Get product by SKU.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Get product by SKU.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "product sku",
+                        "name": "sku",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.ProductOutput"
+                        }
+                    },
+                    "404": {
+                        "description": "No Content"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.APIErrorsOutput"
+                        }
+                    }
+                }
+            }
+        },
         "/healthcheck": {
             "get": {
                 "description": "Checks the health of the application (connection to database)",
@@ -86,6 +314,178 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.ProductCategoryOutput": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.ProductImageOutput": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.ProductOutput": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.ProductCategoryOutput"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.ProductImageOutput"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "sku": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.ProductsOutput": {
+            "type": "object",
+            "properties": {
+                "currentPage": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_application_dto.ProductOutput"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_KauanCarvalho_fiap-sa-product-service_internal_core_usecase_dto.ProductCategoryCreate": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_KauanCarvalho_fiap-sa-product-service_internal_core_usecase_dto.ProductCategoryUpdate": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_KauanCarvalho_fiap-sa-product-service_internal_core_usecase_dto.ProductImageCreate": {
+            "type": "object",
+            "required": [
+                "url"
+            ],
+            "properties": {
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_KauanCarvalho_fiap-sa-product-service_internal_core_usecase_dto.ProductImageUpdate": {
+            "type": "object",
+            "required": [
+                "url"
+            ],
+            "properties": {
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_KauanCarvalho_fiap-sa-product-service_internal_core_usecase_dto.ProductInputCreate": {
+            "type": "object",
+            "required": [
+                "category",
+                "description",
+                "images",
+                "name",
+                "price"
+            ],
+            "properties": {
+                "category": {
+                    "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_core_usecase_dto.ProductCategoryCreate"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_core_usecase_dto.ProductImageCreate"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number",
+                    "minimum": 0
+                }
+            }
+        },
+        "github_com_KauanCarvalho_fiap-sa-product-service_internal_core_usecase_dto.ProductInputUpdate": {
+            "type": "object",
+            "required": [
+                "category",
+                "description",
+                "images",
+                "name",
+                "price",
+                "sku"
+            ],
+            "properties": {
+                "category": {
+                    "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_core_usecase_dto.ProductCategoryUpdate"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_KauanCarvalho_fiap-sa-product-service_internal_core_usecase_dto.ProductImageUpdate"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "sku": {
                     "type": "string"
                 }
             }

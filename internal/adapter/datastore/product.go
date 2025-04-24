@@ -3,12 +3,14 @@ package datastore
 import (
 	"context"
 	"errors"
+	"strings"
 	"time"
 
 	"github.com/KauanCarvalho/fiap-sa-product-service/internal/core/domain/entities"
 	"github.com/KauanCarvalho/fiap-sa-product-service/internal/core/usecase/ports"
 	"github.com/KauanCarvalho/fiap-sa-product-service/internal/shared"
 	internalErrors "github.com/KauanCarvalho/fiap-sa-product-service/internal/shared/errors"
+	"github.com/go-sql-driver/mysql"
 
 	"gorm.io/gorm"
 )
@@ -75,7 +77,7 @@ func (ds *datastore) GetAllProduct(ctx context.Context, filter *ports.ProductFil
 func (ds *datastore) CreateProduct(ctx context.Context, product *entities.Product) error {
 	err := ds.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		if err := tx.Create(&product).Error; err != nil {
-			if errors.Is(err, gorm.ErrDuplicatedKey) {
+			if isDuplicateSKUError(err) {
 				return ErrExistingRecord
 			}
 			return internalErrors.NewInternalError("Failed to create product", err)
@@ -94,6 +96,14 @@ func (ds *datastore) CreateProduct(ctx context.Context, product *entities.Produc
 	return nil
 }
 
+func isDuplicateSKUError(err error) bool {
+	var mysqlErr *mysql.MySQLError
+	if errors.As(err, &mysqlErr) {
+		return mysqlErr.Number == 1062 && strings.Contains(mysqlErr.Message, "sku")
+	}
+	return false
+}
+
 func (ds *datastore) UpdateProduct(ctx context.Context, product *entities.Product) error {
 	return ds.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		existingProduct := &entities.Product{SKU: product.SKU}
@@ -107,7 +117,9 @@ func (ds *datastore) UpdateProduct(ctx context.Context, product *entities.Produc
 
 		product.ID = existingProduct.ID
 		if err := ds.updateProductFields(ctx, tx, product); err != nil {
-			return err
+			if isDuplicateSKUError(err) {
+				return ErrExistingRecord
+			}
 		}
 
 		if err := ds.recreateImages(ctx, tx, product); err != nil {
@@ -119,7 +131,7 @@ func (ds *datastore) UpdateProduct(ctx context.Context, product *entities.Produc
 }
 
 func (ds *datastore) findProductBySKU(ctx context.Context, tx *gorm.DB, product *entities.Product) error {
-	if err := tx.WithContext(ctx).Where("LOWER(sku) = LOWER(?)", product.SKU).First(product).Error; err != nil {
+	if err := tx.WithContext(ctx).Unscoped().Where("LOWER(sku) = LOWER(?)", product.SKU).First(product).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return internalErrors.NewInternalError("Product not found", err)
 		}
@@ -137,14 +149,16 @@ func (ds *datastore) deleteProductImages(ctx context.Context, tx *gorm.DB, produ
 
 func (ds *datastore) updateProductFields(ctx context.Context, tx *gorm.DB, product *entities.Product) error {
 	return tx.WithContext(ctx).
+		Unscoped().
 		Model(&entities.Product{}).
 		Where("id = ?", product.ID).
-		Updates(entities.Product{
-			Name:        product.Name,
-			Description: product.Description,
-			Price:       product.Price,
-			CategoryID:  product.Category.ID,
-			SKU:         shared.Slugify(product.Name),
+		Updates(map[string]interface{}{
+			"name":        product.Name,
+			"description": product.Description,
+			"price":       product.Price,
+			"category_id": product.CategoryID,
+			"sku":         shared.Slugify(product.Name),
+			"deleted_at":  nil,
 		}).Error
 }
 
