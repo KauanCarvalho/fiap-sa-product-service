@@ -1,0 +1,862 @@
+{
+	"info": {
+		"_postman_id": "2967103b-7f8c-4f72-8aa8-33b5b28662ce",
+		"name": "FIAP - Fast Food",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10219511",
+		"_collection_link": "https://fiap-software-architecture-7128.postman.co/workspace/fiap-sa-product-service~557e1027-5efc-4b4e-9b5a-c3baf515edd0/collection/10219511-2967103b-7f8c-4f72-8aa8-33b5b28662ce?action=share&source=collection_link&creator=10219511"
+	},
+	"item": [
+		{
+			"name": "infrastructure",
+			"item": [
+				{
+					"name": "Healthcheck",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/healthcheck",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"healthcheck"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 - Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/healthcheck",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"healthcheck"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "X-Request-Id",
+									"value": "fiap-sa-product-service-32d69efe-41d3-4479-bc27-2cfe1d0d0db7"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Apr 2025 03:15:57 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "15"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"ok\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "API",
+			"item": [
+				{
+					"name": "V1",
+					"item": [
+						{
+							"name": "Admin",
+							"item": [
+								{
+									"name": "Products",
+									"item": [
+										{
+											"name": "Create",
+											"event": [
+												{
+													"listen": "prerequest",
+													"script": {
+														"exec": [
+															"const uuid = () => crypto.randomUUID();\r",
+															"pm.variables.set(\"uuid\", uuid());\r",
+															"\r",
+															"const randomPrice = parseFloat((Math.random() * 100).toFixed(2));\r",
+															"pm.variables.set(\"randomPrice\", randomPrice);"
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												},
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"if (pm.response.code === 201) {\r",
+															"    const responseJson = pm.response.json();\r",
+															"    const sku = responseJson.sku;\r",
+															"\r",
+															"    pm.environment.set(\"sku\", sku);\r",
+															"}"
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												}
+											],
+											"protocolProfileBehavior": {
+												"disabledSystemHeaders": {}
+											},
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"name\": \"name {{uuid}}\",\r\n    \"price\": {{randomPrice}},\r\n    \"description\": \"description {{uuid}}\",\r\n    \"category\": {\r\n        \"name\": \"lanche\"\r\n    },\r\n    \"images\": [\r\n        {\r\n            \"url\": \"https://placehold.co/{{uuid}}\"\r\n        },\r\n        {\r\n            \"url\": \"https://placehold.co/{{uuid}}\"\r\n        }\r\n    ]\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{base_url}}/api/v1/admin/products/",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"admin",
+														"products",
+														""
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "201 - Success",
+													"originalRequest": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\r\n    \"name\": \"name {{uuid}}\",\r\n    \"price\": {{randomPrice}},\r\n    \"description\": \"description {{uuid}}\",\r\n    \"category\": {\r\n        \"name\": \"lanche\"\r\n    },\r\n    \"images\": [\r\n        {\r\n            \"url\": \"https://placehold.co/{{uuid}}\"\r\n        },\r\n        {\r\n            \"url\": \"https://placehold.co/{{uuid}}\"\r\n        }\r\n    ]\r\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{base_url}}/api/v1/admin/products/",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"api",
+																"v1",
+																"admin",
+																"products",
+																""
+															]
+														}
+													},
+													"status": "Created",
+													"code": 201,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json; charset=utf-8"
+														},
+														{
+															"key": "X-Request-Id",
+															"value": "fiap-sa-product-service-e6e2c351-d6f9-44f6-93ac-093fb59a1031"
+														},
+														{
+															"key": "Date",
+															"value": "Thu, 24 Apr 2025 03:39:29 GMT"
+														},
+														{
+															"key": "Content-Length",
+															"value": "357"
+														}
+													],
+													"cookie": [],
+													"body": "{\n    \"name\": \"name 76975b23-39d2-406d-9e87-35ab6a93791e\",\n    \"price\": 46.47,\n    \"description\": \"description 76975b23-39d2-406d-9e87-35ab6a93791e\",\n    \"sku\": \"name-76975b23-39d2-406d-9e87-35ab6a93791e\",\n    \"category\": {\n        \"name\": \"lanche\"\n    },\n    \"images\": [\n        {\n            \"url\": \"https://placehold.co/76975b23-39d2-406d-9e87-35ab6a93791e\"\n        },\n        {\n            \"url\": \"https://placehold.co/76975b23-39d2-406d-9e87-35ab6a93791e\"\n        }\n    ]\n}"
+												},
+												{
+													"name": "400 - Failure",
+													"originalRequest": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\r\n    \"name\": \"\",\r\n    \"price\": {{randomPrice}},\r\n    \"description\": \"description {{uuid}}\",\r\n    \"category\": {\r\n        \"name\": \"lanche\"\r\n    },\r\n    \"images\": [\r\n        {\r\n            \"url\": \"https://placehold.co/{{uuid}}\"\r\n        },\r\n        {\r\n            \"url\": \"https://placehold.co/{{uuid}}\"\r\n        }\r\n    ]\r\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{base_url}}/api/v1/admin/products/",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"api",
+																"v1",
+																"admin",
+																"products",
+																""
+															]
+														}
+													},
+													"status": "Bad Request",
+													"code": 400,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json; charset=utf-8"
+														},
+														{
+															"key": "X-Request-Id",
+															"value": "fiap-sa-product-service-bca7ebf1-bdb9-43de-80af-e6660193b230"
+														},
+														{
+															"key": "Date",
+															"value": "Thu, 24 Apr 2025 03:40:20 GMT"
+														},
+														{
+															"key": "Content-Length",
+															"value": "64"
+														}
+													],
+													"cookie": [],
+													"body": "{\n    \"errors\": [\n        {\n            \"field\": \"Name\",\n            \"message\": \"This field is required\"\n        }\n    ]\n}"
+												},
+												{
+													"name": "404 - Failure",
+													"originalRequest": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\r\n    \"name\": \"name {{uuid}}\",\r\n    \"price\": {{randomPrice}},\r\n    \"description\": \"description {{uuid}}\",\r\n    \"category\": {\r\n        \"name\": \"sa\"\r\n    },\r\n    \"images\": [\r\n        {\r\n            \"url\": \"https://placehold.co/{{uuid}}\"\r\n        },\r\n        {\r\n            \"url\": \"https://placehold.co/{{uuid}}\"\r\n        }\r\n    ]\r\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{base_url}}/api/v1/admin/products/",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"api",
+																"v1",
+																"admin",
+																"products",
+																""
+															]
+														}
+													},
+													"status": "Not Found",
+													"code": 404,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json; charset=utf-8"
+														},
+														{
+															"key": "X-Request-Id",
+															"value": "fiap-sa-product-service-dd15c926-9fd0-4956-a12c-0fe68fd1e260"
+														},
+														{
+															"key": "Date",
+															"value": "Thu, 24 Apr 2025 03:52:06 GMT"
+														},
+														{
+															"key": "Content-Length",
+															"value": "45"
+														}
+													],
+													"cookie": [],
+													"body": "{\n    \"errors\": [\n        {\n            \"message\": \"resource not found\"\n        }\n    ]\n}"
+												},
+												{
+													"name": "409  - Failure",
+													"originalRequest": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\r\n    \"name\": \"name\",\r\n    \"price\": {{randomPrice}},\r\n    \"description\": \"description {{uuid}}\",\r\n    \"category\": {\r\n        \"name\": \"lanche\"\r\n    },\r\n    \"images\": [\r\n        {\r\n            \"url\": \"https://placehold.co/{{uuid}}\"\r\n        },\r\n        {\r\n            \"url\": \"https://placehold.co/{{uuid}}\"\r\n        }\r\n    ]\r\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{base_url}}/api/v1/admin/products/",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"api",
+																"v1",
+																"admin",
+																"products",
+																""
+															]
+														}
+													},
+													"status": "Conflict",
+													"code": 409,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json; charset=utf-8"
+														},
+														{
+															"key": "X-Request-Id",
+															"value": "fiap-sa-product-service-36ed11a1-1edd-4218-9b4d-50c505bb4f5e"
+														},
+														{
+															"key": "Date",
+															"value": "Thu, 24 Apr 2025 04:14:25 GMT"
+														},
+														{
+															"key": "Content-Length",
+															"value": "59"
+														}
+													],
+													"cookie": [],
+													"body": "{\n    \"errors\": [\n        {\n            \"field\": \"sku\",\n            \"message\": \"SKU already exists\"\n        }\n    ]\n}"
+												}
+											]
+										},
+										{
+											"name": "Update",
+											"event": [
+												{
+													"listen": "prerequest",
+													"script": {
+														"exec": [
+															"const uuid = () => crypto.randomUUID();\r",
+															"pm.variables.set(\"uuid\", uuid());\r",
+															"\r",
+															"const randomPrice = parseFloat((Math.random() * 100).toFixed(2));\r",
+															"pm.variables.set(\"randomPrice\", randomPrice);"
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												},
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"if (pm.response.code === 200) {\r",
+															"    const responseJson = pm.response.json();\r",
+															"    const sku = responseJson.sku;\r",
+															"\r",
+															"    pm.environment.set(\"sku\", sku);\r",
+															"}"
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												}
+											],
+											"request": {
+												"method": "PUT",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"name\": \"name {{uuid}}\",\r\n    \"price\": {{randomPrice}},\r\n    \"description\": \"description {{uuid}}\",\r\n    \"category\": {\r\n        \"name\": \"lanche\"\r\n    },\r\n    \"images\": [\r\n        {\r\n            \"url\": \"https://placehold.co/{{uuid}}\"\r\n        },\r\n        {\r\n            \"url\": \"https://placehold.co/{{uuid}}\"\r\n        }\r\n    ]\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{base_url}}/api/v1/admin/products/{{sku}}",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"admin",
+														"products",
+														"{{sku}}"
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "200 - Success",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\r\n    \"name\": \"name {{uuid}}\",\r\n    \"price\": {{randomPrice}},\r\n    \"description\": \"description {{uuid}}\",\r\n    \"category\": {\r\n        \"name\": \"lanche\"\r\n    },\r\n    \"images\": [\r\n        {\r\n            \"url\": \"https://placehold.co/{{uuid}}\"\r\n        },\r\n        {\r\n            \"url\": \"https://placehold.co/{{uuid}}\"\r\n        }\r\n    ]\r\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{base_url}}/api/v1/admin/products/{{sku}}",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"api",
+																"v1",
+																"admin",
+																"products",
+																"{{sku}}"
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json; charset=utf-8"
+														},
+														{
+															"key": "X-Request-Id",
+															"value": "fiap-sa-product-service-dfe512c7-2f1e-481b-9c68-93e79ce76234"
+														},
+														{
+															"key": "Date",
+															"value": "Thu, 24 Apr 2025 03:50:36 GMT"
+														},
+														{
+															"key": "Content-Length",
+															"value": "357"
+														}
+													],
+													"cookie": [],
+													"body": "{\n    \"name\": \"name 353eba49-784a-4f58-b038-81b036656d96\",\n    \"price\": 41.49,\n    \"description\": \"description 353eba49-784a-4f58-b038-81b036656d96\",\n    \"sku\": \"name-353eba49-784a-4f58-b038-81b036656d96\",\n    \"category\": {\n        \"name\": \"lanche\"\n    },\n    \"images\": [\n        {\n            \"url\": \"https://placehold.co/353eba49-784a-4f58-b038-81b036656d96\"\n        },\n        {\n            \"url\": \"https://placehold.co/353eba49-784a-4f58-b038-81b036656d96\"\n        }\n    ]\n}"
+												},
+												{
+													"name": "400 - Failure",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\r\n    \"name\": \"\",\r\n    \"price\": {{randomPrice}},\r\n    \"description\": \"description {{uuid}}\",\r\n    \"category\": {\r\n        \"name\": \"lanche\"\r\n    },\r\n    \"images\": [\r\n        {\r\n            \"url\": \"https://placehold.co/{{uuid}}\"\r\n        },\r\n        {\r\n            \"url\": \"https://placehold.co/{{uuid}}\"\r\n        }\r\n    ]\r\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{base_url}}/api/v1/admin/products/{{sku}}",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"api",
+																"v1",
+																"admin",
+																"products",
+																"{{sku}}"
+															]
+														}
+													},
+													"status": "Bad Request",
+													"code": 400,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json; charset=utf-8"
+														},
+														{
+															"key": "X-Request-Id",
+															"value": "fiap-sa-product-service-60a13225-8756-4744-9c97-a7abe07d73dd"
+														},
+														{
+															"key": "Date",
+															"value": "Thu, 24 Apr 2025 03:51:03 GMT"
+														},
+														{
+															"key": "Content-Length",
+															"value": "64"
+														}
+													],
+													"cookie": [],
+													"body": "{\n    \"errors\": [\n        {\n            \"field\": \"Name\",\n            \"message\": \"This field is required\"\n        }\n    ]\n}"
+												},
+												{
+													"name": "404 - Failure",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\r\n    \"name\": \"name {{uuid}}\",\r\n    \"price\": {{randomPrice}},\r\n    \"description\": \"description {{uuid}}\",\r\n    \"category\": {\r\n        \"name\": \"sa\"\r\n    },\r\n    \"images\": [\r\n        {\r\n            \"url\": \"https://placehold.co/{{uuid}}\"\r\n        },\r\n        {\r\n            \"url\": \"https://placehold.co/{{uuid}}\"\r\n        }\r\n    ]\r\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{base_url}}/api/v1/admin/products/{{sku}}",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"api",
+																"v1",
+																"admin",
+																"products",
+																"{{sku}}"
+															]
+														}
+													},
+													"status": "Not Found",
+													"code": 404,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json; charset=utf-8"
+														},
+														{
+															"key": "X-Request-Id",
+															"value": "fiap-sa-product-service-99605408-e125-4cb7-9051-fff45e70f5b3"
+														},
+														{
+															"key": "Date",
+															"value": "Thu, 24 Apr 2025 03:51:51 GMT"
+														},
+														{
+															"key": "Content-Length",
+															"value": "45"
+														}
+													],
+													"cookie": [],
+													"body": "{\n    \"errors\": [\n        {\n            \"message\": \"resource not found\"\n        }\n    ]\n}"
+												}
+											]
+										},
+										{
+											"name": "New Request",
+											"request": {
+												"method": "DELETE",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/api/v1/admin/products/{{sku}}",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"admin",
+														"products",
+														"{{sku}}"
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "204 - Success",
+													"originalRequest": {
+														"method": "DELETE",
+														"header": [],
+														"url": {
+															"raw": "{{base_url}}/api/v1/admin/products/{{sku}}",
+															"host": [
+																"{{base_url}}"
+															],
+															"path": [
+																"api",
+																"v1",
+																"admin",
+																"products",
+																"{{sku}}"
+															]
+														}
+													},
+													"status": "No Content",
+													"code": 204,
+													"_postman_previewlanguage": "plain",
+													"header": [
+														{
+															"key": "X-Request-Id",
+															"value": "fiap-sa-product-service-a6e2d624-a927-414a-8e24-0f5490edd55d"
+														},
+														{
+															"key": "Date",
+															"value": "Thu, 24 Apr 2025 03:53:17 GMT"
+														}
+													],
+													"cookie": [],
+													"body": null
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Products",
+							"item": [
+								{
+									"name": "List",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/api/v1/products/?page=1&pageSize=5&category=lanche",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"products",
+												""
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "1"
+												},
+												{
+													"key": "pageSize",
+													"value": "5"
+												},
+												{
+													"key": "category",
+													"value": "lanche"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "200 - Success",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/api/v1/products/?page=1&pageSize=5&category=lanche",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"products",
+														""
+													],
+													"query": [
+														{
+															"key": "page",
+															"value": "1"
+														},
+														{
+															"key": "pageSize",
+															"value": "5"
+														},
+														{
+															"key": "category",
+															"value": "lanche"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json; charset=utf-8"
+												},
+												{
+													"key": "X-Request-Id",
+													"value": "fiap-sa-product-service-f2ceaee1-3231-4989-a572-d339266a7b42"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 24 Apr 2025 04:23:06 GMT"
+												},
+												{
+													"key": "Content-Length",
+													"value": "1138"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"products\": [\n        {\n            \"name\": \"new product name from postman b\",\n            \"price\": 12,\n            \"description\": \"some description for the product b\",\n            \"sku\": \"new-product-name-from-postman-b\",\n            \"category\": {\n                \"name\": \"lanche\"\n            },\n            \"images\": [\n                {\n                    \"url\": \"https://placehold.co/400\"\n                }\n            ]\n        },\n        {\n            \"name\": \"new product name from postman c\",\n            \"price\": 12,\n            \"description\": \"some description for the product b\",\n            \"sku\": \"new-product-name-from-postman-c\",\n            \"category\": {\n                \"name\": \"lanche\"\n            },\n            \"images\": [\n                {\n                    \"url\": \"https://placehold.co/400\"\n                }\n            ]\n        },\n        {\n            \"name\": \"new product name from postman d\",\n            \"price\": 12,\n            \"description\": \"some description for the product d\",\n            \"sku\": \"new-product-name-from-postman-d\",\n            \"category\": {\n                \"name\": \"lanche\"\n            },\n            \"images\": [\n                {\n                    \"url\": \"https://placehold.co/400\"\n                }\n            ]\n        },\n        {\n            \"name\": \"new product name from postman z\",\n            \"price\": 12,\n            \"description\": \"some description for the product e\",\n            \"sku\": \"new-product-name-from-postman-z\",\n            \"category\": {\n                \"name\": \"lanche\"\n            },\n            \"images\": [\n                {\n                    \"url\": \"https://placehold.co/500\"\n                },\n                {\n                    \"url\": \"https://placehold.co/501\"\n                }\n            ]\n        },\n        {\n            \"name\": \"34\",\n            \"price\": 12,\n            \"description\": \"1234\",\n            \"sku\": \"34\",\n            \"category\": {\n                \"name\": \"lanche\"\n            },\n            \"images\": [\n                {\n                    \"url\": \"https://placehold.co/1234\"\n                },\n                {\n                    \"url\": \"https://placehold.co/1234\"\n                }\n            ]\n        }\n    ],\n    \"pageSize\": 5,\n    \"currentPage\": 1,\n    \"total\": 17\n}"
+										}
+									]
+								},
+								{
+									"name": "Show",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"if (pm.response.code === 200) {\r",
+													"    const responseJson = pm.response.json();\r",
+													"    const sku = responseJson.sku;\r",
+													"\r",
+													"    pm.environment.set(\"sku\", sku);\r",
+													"}"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/api/v1/products/{{sku}}",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"products",
+												"{{sku}}"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "200 - Success",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/api/v1/products/{{sku}}",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"products",
+														"{{sku}}"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json; charset=utf-8"
+												},
+												{
+													"key": "X-Request-Id",
+													"value": "fiap-sa-product-service-d8e68c50-076c-47fd-8d27-124cffc93ac6"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 24 Apr 2025 04:24:30 GMT"
+												},
+												{
+													"key": "Content-Length",
+													"value": "360"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"name 7423a42f-d738-46cc-9834-023c07f2316b\",\n    \"price\": 11.75,\n    \"description\": \"description 7423a42f-d738-46cc-9834-023c07f2316b\",\n    \"sku\": \"name-7423a42f-d738-46cc-9834-023c07f2316b\",\n    \"category\": {\n        \"name\": \"sobremesa\"\n    },\n    \"images\": [\n        {\n            \"url\": \"https://placehold.co/7423a42f-d738-46cc-9834-023c07f2316b\"\n        },\n        {\n            \"url\": \"https://placehold.co/7423a42f-d738-46cc-9834-023c07f2316b\"\n        }\n    ]\n}"
+										},
+										{
+											"name": "404 - Failure",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base_url}}/api/v1/products/{{sku}}-sas",
+													"host": [
+														"{{base_url}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"products",
+														"{{sku}}-sas"
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "plain",
+											"header": [
+												{
+													"key": "X-Request-Id",
+													"value": "fiap-sa-product-service-96f1caf8-88e5-47c1-a4d9-ffab1cfa85c8"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 24 Apr 2025 04:24:45 GMT"
+												},
+												{
+													"key": "Content-Length",
+													"value": "0"
+												}
+											],
+											"cookie": [],
+											"body": null
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}

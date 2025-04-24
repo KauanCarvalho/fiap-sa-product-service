@@ -39,6 +39,19 @@ func NewProductAdminHandler(
 	}
 }
 
+// Create product.
+// @Summary	    Create product.
+// @Description Create product.
+// @Tags        Product
+// @Accept      json
+// @Produce     json
+// @Param       product body useCaseDTO.ProductInputCreate true "request body"
+// @Success     200 {object} dto.ProductOutput
+// @Failure     400 {object} dto.APIErrorsOutput
+// @Failure     404 {object} dto.APIErrorsOutput
+// @Failure     409 {object} dto.APIErrorsOutput
+// @Failure     500 {object} dto.APIErrorsOutput
+// @Router      /api/v1/admin/products/ [post].
 func (h *productAdminHandler) Create(c *gin.Context) {
 	ctx := c.Request.Context()
 
@@ -53,15 +66,6 @@ func (h *productAdminHandler) Create(c *gin.Context) {
 	}
 
 	if err := useCaseDTO.ValidateProductCreate(input); err != nil {
-		if errors.Is(err, datastore.ErrExistingRecord) {
-			c.JSON(http.StatusConflict, dto.SimpleAPIErrorsOutput(
-				"",
-				"sku",
-				"SKU already exists",
-			))
-			return
-		}
-
 		errors := validation.HandleValidationError(err)
 		c.JSON(http.StatusBadRequest, dto.ErrorsFromValidationErrors(errors))
 		return
@@ -69,7 +73,14 @@ func (h *productAdminHandler) Create(c *gin.Context) {
 
 	product, err := h.createProductUseCase.Run(ctx, input)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
+		if errors.Is(err, datastore.ErrExistingRecord) {
+			c.JSON(http.StatusConflict, dto.SimpleAPIErrorsOutput(
+				"",
+				"sku",
+				"SKU already exists",
+			))
+			return
+		} else if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.JSON(http.StatusNotFound, dto.SimpleAPIErrorsOutput("", "", "resource not found"))
 			return
 		}
@@ -81,6 +92,19 @@ func (h *productAdminHandler) Create(c *gin.Context) {
 	c.JSON(http.StatusCreated, mappers.ToProductDTO(*product))
 }
 
+// Update product.
+// @Summary	    Update product.
+// @Description Update product.
+// @Tags        Product
+// @Accept      json
+// @Produce     json
+// @Param       product body useCaseDTO.ProductInputUpdate true "request body"
+// @Success     200 {object} dto.ProductOutput
+// @Failure     400 {object} dto.APIErrorsOutput
+// @Failure     404 {object} dto.APIErrorsOutput
+// @Failure     409 {object} dto.APIErrorsOutput
+// @Failure     500 {object} dto.APIErrorsOutput
+// @Router      /api/v1/admin/products/ [put].
 func (h *productAdminHandler) Update(c *gin.Context) {
 	ctx := c.Request.Context()
 	sku := c.Param("sku")
@@ -105,7 +129,14 @@ func (h *productAdminHandler) Update(c *gin.Context) {
 
 	product, err := h.updateProductUseCase.Run(ctx, input)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
+		if errors.Is(err, datastore.ErrExistingRecord) {
+			c.JSON(http.StatusConflict, dto.SimpleAPIErrorsOutput(
+				"",
+				"sku",
+				"SKU already exists",
+			))
+			return
+		} else if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.JSON(http.StatusNotFound, dto.SimpleAPIErrorsOutput("", "", "resource not found"))
 			return
 		}
@@ -121,12 +152,26 @@ func (h *productAdminHandler) Update(c *gin.Context) {
 	c.JSON(http.StatusOK, mappers.ToProductDTO(*product))
 }
 
+// Delete product.
+// @Summary	    Delete product.
+// @Description Delete product.
+// @Tags        Product
+// @Accept      json
+// @Produce     json
+// @Success     204 "No Content"
+// @Failure     500 {object} dto.APIErrorsOutput
+// @Router      /api/v1/admin/products/ [delete].
 func (h *productAdminHandler) Delete(c *gin.Context) {
 	ctx := c.Request.Context()
 	sku := c.Param("sku")
 
 	err := h.deleteProductUseCase.Run(ctx, sku)
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.Status(http.StatusNoContent)
+			return
+		}
+
 		c.JSON(http.StatusInternalServerError, dto.SimpleAPIErrorsOutput(
 			"",
 			"",

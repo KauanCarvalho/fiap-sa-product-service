@@ -35,6 +35,17 @@ func NewProductHandler(
 	}
 }
 
+// Get product by SKU.
+// @Summary	    Get product by SKU.
+// @Description Get product by SKU.
+// @Tags        Product
+// @Accept      json
+// @Produce     json
+// @Param       sku path string true "product sku"
+// @Success     200 {object} dto.ProductOutput
+// @Failure     404 "No Content"
+// @Failure     500 {object} dto.APIErrorsOutput
+// @Router      /api/v1/products/{sku} [get].
 func (h *productHandler) GetProduct(c *gin.Context) {
 	ctx := c.Request.Context()
 	sku := c.Param("sku")
@@ -55,6 +66,18 @@ func (h *productHandler) GetProduct(c *gin.Context) {
 	c.JSON(http.StatusOK, mappers.ToProductDTO(*product))
 }
 
+// Get products by filter.
+// @Summary	    Get products by filter.
+// @Description Get products by filter.
+// @Tags        Product
+// @Accept      json
+// @Produce     json
+// @Param       page query string false "Current page"
+// @Param       pageSize query string false "Page size"
+// @Param       category query string false "Category name"
+// @Success     200 {object} dto.ProductsOutput
+// @Failure     500 {object} dto.APIErrorsOutput
+// @Router      /api/v1/products/ [get].
 func (h *productHandler) GetProducts(c *gin.Context) {
 	ctx := c.Request.Context()
 
