@@ -22,14 +22,18 @@ import (
 // @schemes http
 // @accept  json
 // @produce json
-// main is the entry point of the application.
+// main is the entry point of the entire application.
 func main() {
 	cfg := config.Load()
+
+	log.Println("Starting Fiap SA Product Service...")
 
 	db, err := di.NewDatabaseConnectionPool(cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	log.Println("Database connection pool created.")
 
 	logger, err := zap.NewProduction()
 	if err != nil {

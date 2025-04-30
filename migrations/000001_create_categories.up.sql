@@ -8,8 +8,3 @@ CREATE TABLE IF NOT EXISTS `categories` (
     UNIQUE KEY `unique_name` (`name`),
     INDEX `idx_deleted_at` (`deleted_at`)
 );
-
-INSERT INTO `categories` (`name`) VALUES ('lanche');
-INSERT INTO `categories` (`name`) VALUES ('bebida');
-INSERT INTO `categories` (`name`) VALUES ('sobremesa');
-INSERT INTO `categories` (`name`) VALUES ('acompanhamento');
