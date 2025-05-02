@@ -63,5 +63,6 @@ jobs:
           kubectl apply -f k8s/secrets-api.yml
           kubectl apply -f k8s/deployment-api.yml
           kubectl apply -f k8s/service-api.yml
+          kubectl apply -f k8s/external-service-api.yml
           kubectl apply -f k8s/hpa-api.yml
           kubectl rollout status deployment/product-service-api

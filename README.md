@@ -2,3 +2,9 @@
 
 [![codecov](https://codecov.io/gh/KauanCarvalho/fiap-sa-product-service/graph/badge.svg?token=2OQ6Z6QO4T)](https://codecov.io/gh/KauanCarvalho/fiap-sa-product-service)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=KauanCarvalho_fiap-sa-product-service&metric=alert_status&token=0dfbf4e94b9ed5f843ccc711fa4f16e3541c47ce)](https://sonarcloud.io/summary/new_code?id=KauanCarvalho_fiap-sa-product-service)
+
+## Running the Application
+
+For detailed instructions on how to set up and run the application, including the required infrastructure (e.g., Docker, Terraform, MongoDB, MySQL), please refer to the [README](https://github.com/KauanCarvalho/fiap-sa-infra) in the `fiap-sa-infra` repository.
+
+This repository contains the necessary configurations for running the full environment, including service dependencies, networking, and infrastructure setup.
