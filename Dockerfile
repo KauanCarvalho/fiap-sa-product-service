@@ -30,3 +30,11 @@ COPY --from=build /app/product-service-api .
 EXPOSE 8080
 
 CMD ["/app/start-app.sh"]
+
+FROM base AS migrate
+
+RUN apk add --update --no-cache netcat-openbsd
+
+RUN go install -tags 'mysql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+
+CMD ["/app/config/container/migrate.sh", "up"]

@@ -1,11 +1,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: product-service-api-config
+  name: product-service-config
 data:
-  APP_NAME: "fiap-sa-product-service"
+  APP_NAME: "fiap_sa_product_service"
   APP_ENV: "production"
-  APP_TYPE: "api"
   PORT: "8080"
   DB_PORT: "3306"
   DB_MAX_OPEN_CONNS: "10"
