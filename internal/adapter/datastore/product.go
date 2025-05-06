@@ -132,7 +132,7 @@ func (ds *datastore) UpdateProduct(ctx context.Context, product *entities.Produc
 
 func (ds *datastore) findProductBySKU(ctx context.Context, tx *gorm.DB, product *entities.Product) error {
 	if err := tx.WithContext(ctx).Unscoped().Where("LOWER(sku) = LOWER(?)", product.SKU).First(product).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
 			return internalErrors.NewInternalError("Product not found", err)
 		}
 		return err

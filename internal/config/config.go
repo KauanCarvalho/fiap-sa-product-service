@@ -54,3 +54,7 @@ func (cfg Config) IsDevelopment() bool {
 func (cfg Config) IsProduction() bool {
 	return cfg.AppEnv == "production"
 }
+
+func (cfg Config) IsTest() bool {
+	return cfg.AppEnv == "test"
+}
