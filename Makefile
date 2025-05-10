@@ -18,7 +18,6 @@ endif
 .PHONY: help deps setup-git-hooks lint check-coverage migration migrate-up migrate-down test test-product-service test-bdd coverage-html build-api run-api run-api-air install-tools swag
 
 help:
-	@echo "Usage: make [target]"
 	@echo ""
 	@echo "Available targets:"
 	@echo "  help                  # Show this help message"
@@ -38,6 +37,7 @@ help:
 	@echo "  run-api-air           # Run the API with live reloading"
 	@echo "  install-tools         # Install tools with third-party dependencies"
 	@echo "  swag                  # Generate Swagger documentation"
+	@echo ""
 
 deps:
 	@echo "Installing dependencies..."
