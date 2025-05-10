@@ -8,7 +8,6 @@ import (
 
 	"github.com/KauanCarvalho/fiap-sa-product-service/internal/core/domain/entities"
 	"github.com/KauanCarvalho/fiap-sa-product-service/internal/core/usecase/ports"
-	"github.com/KauanCarvalho/fiap-sa-product-service/internal/shared"
 	internalErrors "github.com/KauanCarvalho/fiap-sa-product-service/internal/shared/errors"
 	"github.com/go-sql-driver/mysql"
 
@@ -157,7 +156,6 @@ func (ds *datastore) updateProductFields(ctx context.Context, tx *gorm.DB, produ
 			"description": product.Description,
 			"price":       product.Price,
 			"category_id": product.CategoryID,
-			"sku":         shared.Slugify(product.Name),
 			"deleted_at":  nil,
 		}).Error
 }

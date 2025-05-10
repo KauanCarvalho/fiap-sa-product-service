@@ -20,6 +20,8 @@ spec:
         env:
         - name: APP_TYPE
           value: "api"
+        - name: GIN_MODE
+          value: "release"
         - name: APP_NAME
           valueFrom:
             configMapKeyRef:

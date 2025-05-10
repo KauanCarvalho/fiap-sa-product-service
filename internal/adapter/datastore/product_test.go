@@ -192,30 +192,6 @@ func TestUpdateProduct(t *testing.T) {
 		err := ds.UpdateProduct(ctx, product)
 		assert.Error(t, err)
 	})
-
-	t.Run("fail to update product with duplicate SKU", func(t *testing.T) {
-		prepareTestDatabase()
-
-		category := &entities.Category{Name: "Refrigerante"}
-		require.NoError(t, sqlDB.Create(category).Error)
-
-		product := &entities.Product{
-			Name:        "itubaina",
-			Description: "Gelado",
-			Price:       6.50,
-			SKU:         "guarana",
-			CategoryID:  category.ID,
-			Images: []entities.Image{
-				{URL: "http://img/guarana-1"},
-			},
-		}
-		require.NoError(t, sqlDB.Create(&product).Error)
-
-		product.Name = "hamburger"
-
-		err := ds.UpdateProduct(ctx, product)
-		require.ErrorIs(t, err, datastore.ErrExistingRecord)
-	})
 }
 
 func TestDeleteProduct(t *testing.T) {

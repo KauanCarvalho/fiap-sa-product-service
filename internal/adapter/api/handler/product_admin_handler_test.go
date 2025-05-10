@@ -213,24 +213,6 @@ func TestProductAdminHandler_Update(t *testing.T) {
 
 		assert.Equal(t, http.StatusNotFound, w.Code)
 	})
-
-	t.Run("should return 409 for duplicate SKU", func(t *testing.T) {
-		body := map[string]interface{}{
-			"name":        "soda",
-			"price":       30.0,
-			"description": "Hambúrguer com cheddar",
-			"category":    map[string]string{"name": "bebida"},
-			"images":      []map[string]string{{"url": "https://example.com/hamburger.jpg"}},
-		}
-		payload, _ := json.Marshal(body)
-		req, _ := http.NewRequest(http.MethodPut, "/api/v1/admin/products/hamburger", bytes.NewReader(payload))
-		req.Header.Set("Content-Type", "application/json")
-		w := httptest.NewRecorder()
-
-		ginEngine.ServeHTTP(w, req)
-
-		assert.Equal(t, http.StatusConflict, w.Code)
-	})
 }
 
 func TestProductAdminHandler_Delete(t *testing.T) {
