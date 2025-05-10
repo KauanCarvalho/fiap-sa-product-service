@@ -4,7 +4,6 @@ APP_NAME := fiap_sa_product_service
 BDD_TEST_DIR=internal/test/bdd
 BIN_DIR := bin
 DATABASE_URL := "mysql://$(DB_USER):$(DB_PASSWORD)@tcp($(DB_HOST):$(DB_PORT))/$(DB_NAME)?charset=utf8mb4&parseTime=true"
-DOCKER_COMPOSE := docker-compose
 ENV_FILE := .env
 GO ?= go
 GOBIN := $(shell ./resolve-gobin.sh)
@@ -16,30 +15,29 @@ ifeq ($(DB_ENV),test)
 endif
 
 .DEFAULT_GOAL := help
-.PHONY: help deps setup-git-hooks lint check-coverage migration migrate-up migrate-down test test-bdd coverage-html build-api run-api run-api-air docker-up docker-down install-tools swag
+.PHONY: help deps setup-git-hooks lint check-coverage migration migrate-up migrate-down test test-product-service test-bdd coverage-html build-api run-api run-api-air install-tools swag
 
 help:
 	@echo "Usage: make [target]"
 	@echo ""
 	@echo "Available targets:"
-	@echo "  help            Show this help message"
-	@echo "  deps            Install dependencies"
-	@echo "  setup-git-hooks Install Git hooks using Lefthook"
-	@echo "  lint            Run linters"
-	@echo "  check-coverage  Check test coverage"
-	@echo "  migration       Create a new database migration files"
-	@echo "  migrate-up      Apply database migrations"
-	@echo "  migrate-down    Revert one database migration"
-	@echo "  test            Run tests"
-	@echo "  test-bdd        Run BDD tests"
-	@echo "  coverage-html   Generate HTML coverage report"
-	@echo "  build-api       Build the API"
-	@echo "  run-api         Run the API"
-	@echo "  run-api-air     Run the API with live reloading"
-	@echo "  docker-up       Start Docker container(s)"
-	@echo "  docker-down     Stop Docker containers"
-	@echo "  install-tools   Install tools with third-party dependencies"
-	@echo "  swag            Generate Swagger documentation"
+	@echo "  help                  # Show this help message"
+	@echo "  deps                  # Install dependencies"
+	@echo "  setup-git-hooks       # Install Git hooks using Lefthook"
+	@echo "  lint                  # Run linters"
+	@echo "  check-coverage        # Check test coverage"
+	@echo "  migration             # Create a new database migration files"
+	@echo "  migrate-up            # Apply database migrations"
+	@echo "  migrate-down          # Revert one database migration"
+	@echo "  test                  # Run tests"
+	@echo "  test-product-service  # Run tests for product service"
+	@echo "  test-bdd              # Run BDD tests"
+	@echo "  coverage-html         # Generate HTML coverage report"
+	@echo "  build-api             # Build the API"
+	@echo "  run-api               # Run the API"
+	@echo "  run-api-air           # Run the API with live reloading"
+	@echo "  install-tools         # Install tools with third-party dependencies"
+	@echo "  swag                  # Generate Swagger documentation"
 
 deps:
 	@echo "Installing dependencies..."
@@ -56,6 +54,10 @@ lint: deps
 test:
 	@echo "Running tests..."
 	DB_NAME=$(DB_NAME)_test APP_ENV=test $(GO) tool godotenv -f $(ENV_FILE) $(GO) test ./... -coverprofile=coverage.out -cover -p 1
+
+test-product-service:
+	@echo "Running tests for product service..."
+	@./testdata/test-product-service.sh $(filter-out $@,$(MAKECMDGOALS))
 
 test-bdd:
 	@echo "Running BDD tests..."
@@ -92,14 +94,6 @@ run-api: build-api
 run-api-air: deps
 	@echo "Running api with live reloading..."
 	$(GO) tool air -c .air.api.toml
-
-docker-up:
-	@echo "Starting Docker container(s)..."
-	$(DOCKER_COMPOSE) up -d $(filter-out $@,$(MAKECMDGOALS))
-
-docker-down:
-	@echo "Stopping Docker containers..."
-	$(DOCKER_COMPOSE) down
 
 install-tools:
 	@echo "Installing tools..."
