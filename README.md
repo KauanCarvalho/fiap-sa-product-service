@@ -18,11 +18,11 @@ flowchart TD
 
   subgraph Services["Services"]
     subgraph Product["fiap-sa-product-service"]
-      Product_Service[("API")]
+      Product_Service["API"]
     end
 
     subgraph Order["fiap-sa-order-service"]
-      Order_API[("API")]
+      Order_API["API"]
     end
   end
 
