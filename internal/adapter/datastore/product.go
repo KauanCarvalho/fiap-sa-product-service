@@ -116,9 +116,7 @@ func (ds *datastore) UpdateProduct(ctx context.Context, product *entities.Produc
 
 		product.ID = existingProduct.ID
 		if err := ds.updateProductFields(ctx, tx, product); err != nil {
-			if isDuplicateSKUError(err) {
-				return ErrExistingRecord
-			}
+			return err
 		}
 
 		if err := ds.recreateImages(ctx, tx, product); err != nil {
