@@ -129,14 +129,7 @@ func (h *productAdminHandler) Update(c *gin.Context) {
 
 	product, err := h.updateProductUseCase.Run(ctx, input)
 	if err != nil {
-		if errors.Is(err, datastore.ErrExistingRecord) {
-			c.JSON(http.StatusConflict, dto.SimpleAPIErrorsOutput(
-				"",
-				"sku",
-				"SKU already exists",
-			))
-			return
-		} else if errors.Is(err, gorm.ErrRecordNotFound) {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.JSON(http.StatusNotFound, dto.SimpleAPIErrorsOutput("", "", "resource not found"))
 			return
 		}
